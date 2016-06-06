@@ -48,25 +48,21 @@ struct CommentConfig {
 // Generate a documentation comment, if available.
 void GenComment(const std::vector<std::string> &dc, std::string *code_ptr,
                 const CommentConfig *config, const char *prefix) {
-  if (dc.begin() == dc.end()) {
-    // Don't output empty comment blocks with 0 lines of comment content.
-    return;
-  }
+  // Don't output empty comment blocks with 0 lines of comment content.
+  if (dc.begin() == dc.end()) return;
 
   std::string &code = *code_ptr;
   if (config != nullptr && config->first_line != nullptr) {
-    code += std::string(prefix) + std::string(config->first_line) + "\n";
+    code = code + prefix + config->first_line + "\n";
   }
-  std::string line_prefix = std::string(prefix) +
+  const char * content_line_prefix = 
       ((config != nullptr && config->content_line_prefix != nullptr) ?
        config->content_line_prefix : "///");
-  for (auto it = dc.begin();
-       it != dc.end();
-       ++it) {
-    code += line_prefix + *it + "\n";
+  for (auto it = dc.begin(); it != dc.end(); ++it) {
+    code = code + prefix + content_line_prefix + *it + "\n";
   }
   if (config != nullptr && config->last_line != nullptr) {
-    code += std::string(prefix) + std::string(config->last_line) + "\n";
+    code = code + prefix + config->last_line + "\n";
   }
 }
 
